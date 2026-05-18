@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     description: "Fast community leaderboard for GSSoC 2026",
     type: "website",
   },
+  verification: {
+    google: "UaoSRKAHIpDzT6sD0-yziuiyGSNpEyp9RaDEA009Vcs",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
