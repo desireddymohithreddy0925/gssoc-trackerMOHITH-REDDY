@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "GitHub user not found", code: "USER_NOT_FOUND" }, { status: 404 });
     if (msg === "RATE_LIMITED")
       return NextResponse.json(
-        { error: "GitHub API rate limit reached. Add a GITHUB_TOKEN env var or try again later.", code: "RATE_LIMITED" },
+        { error: "GitHub API rate limit reached. Add a GH_TOKEN env var or try again later.", code: "RATE_LIMITED" },
         { status: 429 }
       );
     console.error("[pr-tracker]", err);

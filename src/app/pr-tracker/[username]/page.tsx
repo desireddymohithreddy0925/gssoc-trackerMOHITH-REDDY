@@ -258,7 +258,7 @@ function ErrorPage({ username, code }: { username: string; code: string }) {
         </h1>
         <p style={{ margin: "0 0 28px", fontSize: 14, color: ds.inkMute, lineHeight: 1.65 }}>
           {isRateLimit
-            ? "GitHub API rate limit exceeded. Add a GITHUB_TOKEN env var to get 5,000 req/hr, or wait a few minutes."
+            ? "GitHub API rate limit exceeded. Add a GH_TOKEN env var to get 5,000 req/hr, or wait a few minutes."
             : `Failed to fetch PR data for @${username}. The GitHub API may be temporarily unavailable.`}
         </p>
         <Link href="/" style={{
