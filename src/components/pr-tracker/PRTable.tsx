@@ -89,7 +89,7 @@ interface Props {
 
 export function PRTable({ prs, username }: Props) {
   const [query, setQuery]   = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("points");
+  const [sortKey, setSortKey] = useState<SortKey>("mergedAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [page, setPage]     = useState(1);
   const PER_PAGE = 15;
