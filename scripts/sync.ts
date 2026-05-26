@@ -113,22 +113,46 @@ function writeJson(file: string, data: unknown) {
 }
 
 // ── GSSoC API — fetch entire leaderboard once ──────────────────
-async function fetchPage(url: string): Promise<RawParticipant[]> {
-  const ac    = new AbortController();
-  const timer = setTimeout(() => ac.abort(), FETCH_TIMEOUT);
-  try {
-    const res = await fetch(url, {
-      headers: { Accept: "application/json", "User-Agent": "GSSoC-Tracker/1.0" },
-      signal: ac.signal,
-    });
-    if (!res.ok) throw new Error(`API returned ${res.status}`);
-    const raw = await res.json() as { participants?: RawParticipant[] } | RawParticipant[];
-    return Array.isArray(raw)
-      ? raw
-      : (raw as { participants?: RawParticipant[] }).participants ?? [];
-  } finally {
-    clearTimeout(timer);
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fetchPage(url: string): Promise<{ results: RawParticipant[]; rateLimited: boolean }> {
+  const MAX_RETRIES = 4;
+  let attempt = 0;
+
+  while (attempt <= MAX_RETRIES) {
+    const ac    = new AbortController();
+    const timer = setTimeout(() => ac.abort(), FETCH_TIMEOUT);
+    try {
+      const res = await fetch(url, {
+        headers: { Accept: "application/json", "User-Agent": "GSSoC-Tracker/1.0" },
+        signal: ac.signal,
+      });
+
+      if (res.status === 429) {
+        const retryAfter = parseInt(res.headers.get("Retry-After") ?? "0", 10);
+        const wait = retryAfter > 0 ? retryAfter * 1000 : Math.min(10_000 * 2 ** attempt, 120_000);
+        console.warn(`  ⚠️  Rate limited (429) — waiting ${Math.round(wait / 1000)}s before retry ${attempt + 1}/${MAX_RETRIES}…`);
+        clearTimeout(timer);
+        await sleep(wait);
+        attempt++;
+        continue;
+      }
+
+      if (!res.ok) throw new Error(`API returned ${res.status}`);
+      const raw = await res.json() as { participants?: RawParticipant[] } | RawParticipant[];
+      const results: RawParticipant[] = Array.isArray(raw)
+        ? raw
+        : (raw as { participants?: RawParticipant[] }).participants ?? [];
+      return { results, rateLimited: false };
+    } finally {
+      clearTimeout(timer);
+    }
   }
+
+  console.warn(`  ⚠️  Giving up on ${url} after ${MAX_RETRIES} retries — rate limit not lifting`);
+  return { results: [], rateLimited: true };
 }
 
 async function fetchLeaderboard(needed: Set<string>): Promise<RawParticipant[]> {
@@ -138,11 +162,20 @@ async function fetchLeaderboard(needed: Set<string>): Promise<RawParticipant[]> 
   let page = 1;
   const PAGE_SIZE = 100;
   const MAX_PAGES = 500; // up to 50 000 participants
+  const PAGE_DELAY = 500; // ms between pages to avoid rate limiting
 
   while (page <= MAX_PAGES) {
-    const url     = `${GSSOC_API}?page=${page}&limit=${PAGE_SIZE}`;
-    const results = await fetchPage(url);
+    if (page > 1) await sleep(PAGE_DELAY);
+
+    const url = `${GSSOC_API}?page=${page}&limit=${PAGE_SIZE}`;
+    const { results, rateLimited } = await fetchPage(url);
+
+    if (rateLimited) {
+      console.warn(`  ⚠️  Stopping pagination due to persistent rate limiting — using ${all.length} participants collected so far`);
+      break;
+    }
     if (results.length === 0) break;
+
     all.push(...results);
 
     for (const p of results) {
@@ -150,9 +183,9 @@ async function fetchLeaderboard(needed: Set<string>): Promise<RawParticipant[]> 
       if (remaining.has(id)) remaining.delete(id);
     }
 
-    console.log(`  Page ${page}: +${results.length} (total ${all.length}) — still looking for: ${remaining.size > 0 ? [...remaining].join(", ") : "none ✅"}`);
+    const stillLooking = remaining.size > 0 ? [...remaining].join(", ") : "none ✅";
+    console.log(`  Page ${page}: +${results.length} (total ${all.length}) — still looking for: ${stillLooking}`);
 
-    // All required profiles found — no need to fetch further
     if (remaining.size === 0) {
       console.log("  All required profiles found — stopping early.");
       break;
@@ -162,14 +195,15 @@ async function fetchLeaderboard(needed: Set<string>): Promise<RawParticipant[]> 
     page++;
   }
 
-  // Fallback: if pagination returned nothing, try a plain fetch
+  // Fallback: if pagination returned nothing at all, try a plain fetch
   if (all.length === 0) {
-    const fallback = await fetchPage(GSSOC_API);
-    all.push(...fallback);
+    console.log("  Falling back to plain fetch…");
+    const { results } = await fetchPage(GSSOC_API);
+    all.push(...results);
   }
 
   if (remaining.size > 0) {
-    console.warn(`⚠️  Could not find after ${all.length} participants: ${[...remaining].join(", ")}`);
+    console.warn(`⚠️  Not found after scanning ${all.length} participants: ${[...remaining].join(", ")} (they may not be on the leaderboard yet)`);
   }
 
   console.log(`✅ Leaderboard fetched — ${all.length} participants across ${page} page(s)`);
