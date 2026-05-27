@@ -6,8 +6,8 @@
     "token": "f2b3d3a4bc4cc31b159b2cdc987f08113bedb23e",
     "addedAt": "2026-05-19T15:51:48.529Z",
     "lastScore": 110,
-    "lastRank": 26391,
-    "lastChecked": "2026-05-26T20:15:58.959Z"
+    "lastRank": 27309,
+    "lastChecked": "2026-05-27T04:47:47.439Z"
   },
   {
     "github": "kasim672",
@@ -26,8 +26,8 @@
     "token": "6d88bd41ad3affe5a4d4c5aa2fa0d11ea0382d94",
     "addedAt": "2026-05-20T04:34:18.282Z",
     "lastScore": 4032,
-    "lastRank": 100,
-    "lastChecked": "2026-05-26T20:10:45.033Z"
+    "lastRank": 111,
+    "lastChecked": "2026-05-27T03:55:45.841Z"
   },
   {
     "github": "Sricharan106",
@@ -36,8 +36,8 @@
     "token": "09e1f87a0f2217e73c02f18579b839794b31d1da",
     "addedAt": "2026-05-20T05:32:45.873Z",
     "lastScore": 1577,
-    "lastRank": 1063,
-    "lastChecked": "2026-05-26T20:10:58.579Z"
+    "lastRank": 1098,
+    "lastChecked": "2026-05-27T03:55:58.585Z"
   },
   {
     "github": "pithva007",
@@ -45,9 +45,9 @@
     "frequency": "on-change",
     "token": "444d52a305f8a4472dd7610a1dc605c484ea0314",
     "addedAt": "2026-05-22T06:19:22.314Z",
-    "lastScore": 8347,
+    "lastScore": 8913,
     "lastRank": 19,
-    "lastChecked": "2026-05-26T20:10:45.033Z"
+    "lastChecked": "2026-05-27T03:55:42.531Z"
   },
   {
     "github": "Harshit-Maurya838",
@@ -55,9 +55,9 @@
     "frequency": "on-change",
     "token": "829dade3b849ea039c8ff3ca66caf7dfae68f7b5",
     "addedAt": "2026-05-22T08:48:26.347Z",
-    "lastScore": 3876,
-    "lastRank": 113,
-    "lastChecked": "2026-05-26T20:10:46.829Z"
+    "lastScore": 3971,
+    "lastRank": 114,
+    "lastChecked": "2026-05-27T03:55:46.737Z"
   },
   {
     "github": "Pranathi2107",
@@ -66,8 +66,8 @@
     "token": "34befb1c4fbc184457174e77bb24aa6b1d59941b",
     "addedAt": "2026-05-23T13:03:35.109Z",
     "lastScore": 1130,
-    "lastRank": 1946,
-    "lastChecked": "2026-05-26T20:15:46.026Z"
+    "lastRank": 1985,
+    "lastChecked": "2026-05-27T03:56:12.998Z"
   },
   {
     "github": "Sanrishi",
@@ -75,8 +75,8 @@
     "frequency": "daily",
     "token": "051a4d2f2314b5e18eb201c4ce7d52890fdfa20c",
     "addedAt": "2026-05-26T10:58:24.296Z",
-    "lastScore": 4867,
-    "lastRank": 61,
-    "lastChecked": "2026-05-26T20:10:45.033Z"
+    "lastScore": 5887,
+    "lastRank": 48,
+    "lastChecked": "2026-05-27T03:55:42.532Z"
   }
 ]
