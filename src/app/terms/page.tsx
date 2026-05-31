@@ -154,18 +154,23 @@ export default function TermsPage() {
           <Shield size={15} color={ds.primary} />,
           "Data & privacy",
           <>
-            {p("We do not collect, store, or share any personal information.")}
+            {p("We do not collect, store, or sell any personal information.")}
             <ul style={{ margin: "0 0 12px", paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
               {[
-                "No accounts, no sign-up, no cookies beyond what Next.js sets by default",
+                "No accounts, no sign-up required",
                 "Your GitHub username is only used to query the public GitHub API",
                 "PR data is fetched live and not persisted on any server we control",
-                "No analytics, no tracking pixels, no third-party scripts that profile you",
               ].map((item) => (
                 <li key={item} style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 1.65 }}>{item}</li>
               ))}
             </ul>
-            {p("The only external API called is the GitHub REST API (api.github.com), which is subject to GitHub's own terms and rate limits.")}
+            {p(<>
+              <strong style={{ color: "rgba(255,255,255,0.75)" }}>Analytics & Search Console:</strong>{" "}
+              This site uses <strong style={{ color: "rgba(255,255,255,0.75)" }}>Google Analytics</strong> to understand how many people visit and what features they use, and{" "}
+              <strong style={{ color: "rgba(255,255,255,0.75)" }}>Google Search Console</strong> to monitor search performance. These tools collect anonymised, aggregated data (page views, session counts, search queries) and are used solely to improve the tool. No personally identifiable information is shared with us through these services. Google's data practices are governed by the{" "}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, textDecoration: "underline" }}>Google Privacy Policy</a>.
+            </>)}
+            {p("The only external API called for tracker functionality is the GitHub REST API (api.github.com), which is subject to GitHub's own terms and rate limits.")}
           </>
         )}
 
@@ -181,6 +186,25 @@ export default function TermsPage() {
                 GitHub
               </a>. Issues and PRs welcome.
             </>)}
+          </>
+        )}
+
+        {section(
+          <Shield size={15} color="#34d399" />,
+          "No profit — 100% community",
+          <>
+            {p(<>
+              This tool is <strong style={{ color: "rgba(255,255,255,0.85)" }}>completely free</strong> and{" "}
+              <strong style={{ color: "rgba(255,255,255,0.85)" }}>generates zero revenue</strong> for its creator.
+              There are no ads, no paid tiers, no sponsorships, and no monetisation of any kind.
+            </>)}
+            {p("I am Prodhosh — a GSSoC 2026 participant and ambassador. I built this purely to help fellow contributors understand their scores and track their open-source journey. The only reason this exists is community helpfulness.")}
+            {warn(
+              <>
+                <strong>No profit is made from this tool.</strong>{" "}
+                Hosting costs are personally absorbed by the creator. If you find it useful, a ⭐ on GitHub is all the thanks needed.
+              </>
+            )}
           </>
         )}
 
