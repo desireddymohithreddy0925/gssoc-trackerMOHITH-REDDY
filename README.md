@@ -1,34 +1,89 @@
-<h1 align="center">GSSoC PR Tracker</h1>
+<h1 align="center">GSSoC Tracker</h1>
+
+<p align="center">A fast, personal tracker for GSSoC 2026 contributors and mentors.</p>
+
+<p align="center">
+  <a href="https://gssoc-tracker.vercel.app">gssoc-tracker.vercel.app</a> &nbsp;·&nbsp;
+  <a href="https://github.com/PRODHOSH/gssoc-tracker/stargazers">
+    <img src="https://img.shields.io/github/stars/PRODHOSH/gssoc-tracker?style=social" alt="Stars" />
+  </a>
+</p>
 
 > Not affiliated with GirlScript Summer of Code or GirlScript Foundation.
 
-![GSSoC PR Tracker — Home](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/home.png)
+![GSSoC Tracker Home](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/home.png)
 
 ---
 
 ## Why I built this
 
-If you've participated in GSSoC 2026, you already know the pain. The official leaderboard throws a "tracker not accessible" error half the time, and when it does load, it only counts PRs from officially registered GSSoC repos. So if you contributed to a repo that wasn't on their list, those PRs simply don't show up — even if they had all the right labels.
+The official GSSoC leaderboard takes time to load, and that makes sense. It is processing 45,000+ contributors filtered to specific registered project repos — that is a genuinely hard problem at scale.
 
-I built this for myself. I wanted to see all my labelled PRs in one place, understand exactly how my score was calculated, and track how my rank moved over time without refreshing the official site every hour. Once it was working, I cleaned it up and made it public so other participants could use it too.
+But as a contributor, I just wanted a fast personal view of my own PRs, with labels, charts, and a score breakdown I could actually read. So I built it for myself.
+
+When I shared it with a few people, one thing became obvious: a lot of contributors had no idea whether their PRs had actually been accepted. They could not tell if a label had been applied, if their score had changed, or why two similar PRs gave different points. This tool answers those questions directly.
+
+That is why I put it out for the community. It is not trying to replace the official tracker. It is just a faster, clearer way to understand your own contributions. Over 800 people use it now.
 
 ---
 
 ## What it does
 
+You pick your role — contributor or mentor — enter your GitHub username, and the tracker pulls your relevant PRs and calculates your score.
+
+### Contributor tracker
+
 ![PR Tracker Dashboard](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/dashboard.png)
 
 ![PR Tracker Dashboard 2](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/dashboard2.png)
 
-You enter any GitHub username and the tracker pulls all their public PRs that carry GSSoC labels — `gssoc:approved`, `level:*`, `quality:*`, `type:*` — and calculates a score using the official formula:
+Fetches all your public PRs that carry GSSoC labels and scores them using the official formula:
 
 ```
 Score = 50 + (difficulty × quality multiplier) + type bonus
 ```
 
-It shows you your total points, rank trend, label distribution, and a full breakdown of every PR that contributed to your score. There's also a chart so you can see how your points grew over time.
+| Label | Points |
+|---|---|
+| `level:beginner` | 20 pts |
+| `level:intermediate` | 35 pts |
+| `level:advanced` | 55 pts |
+| `level:critical` | 80 pts |
+| `quality:clean` | ×1.2 multiplier |
+| `quality:exceptional` | ×1.5 multiplier |
+| `type:docs` | +5 pts |
+| `type:bug` / `type:feature` / `type:testing` / `type:design` / `type:refactor` | +10 pts |
+| `type:accessibility` / `type:performance` / `type:devops` | +15 pts |
+| `type:security` | +20 pts |
 
-The key difference from the official tracker — **this one is not limited to registered repos**. It reads all your public PRs with GSSoC labels, so your score here might be higher than what the official leaderboard shows.
+PRs tagged `gssoc:invalid`, `gssoc:spam`, or `gssoc:ai-slop` score 0.
+
+The key difference from the official tracker: **this one is not limited to registered repos**. It reads all your public PRs with GSSoC labels, so your score here may be higher than the official leaderboard.
+
+### Mentor tracker
+
+If you are a GSSoC mentor, you can track the PRs you have reviewed. It searches for PRs labelled `mentor:yourusername` and `gssoc:approved` and calculates your mentor score:
+
+```
+Score = level base + quality bonus
+```
+
+| Label | Points |
+|---|---|
+| `level:beginner` | 10 pts |
+| `level:intermediate` | 20 pts |
+| `level:advanced` | 30 pts |
+| `level:critical` | 50 pts |
+| `quality:clean` | +5 pts |
+| `quality:exceptional` | +10 pts |
+
+### Analytics
+
+Both tracker pages show three charts:
+
+- **Level distribution** — breakdown of your PRs by difficulty level
+- **Quality distribution** — how many PRs had a quality label vs none
+- **Type breakdown** — which PR types (bug, feature, docs, etc.) you contributed most
 
 ---
 
@@ -36,23 +91,15 @@ The key difference from the official tracker — **this one is not limited to re
 
 ![Subscribe Form](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/subscribe.png)
 
-You can subscribe to get email alerts whenever your score or rank changes. Just hit "Get alerts" on the home page, enter your GitHub username and email, and choose whether you want to be notified on every score change or just get a daily morning digest.
-
-Everything is stored in this repo's `data/subscribers.json` — no external database. When your score changes, you get an email that shows exactly what changed, which PRs contributed, and a one-click unsubscribe link at the bottom.
+You can subscribe to get email alerts whenever your score or rank changes. Hit "Get alerts" on the home page, enter your GitHub username and email, and choose between instant notifications or a daily morning digest.
 
 ![Email Alert](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/email-alert.png)
 
----
-
-## Important note
-
-This is an independent community tool. The scores shown here **may differ from the official GSSoC leaderboard** because this tracker counts PRs from all repos, not just the ones officially registered with GSSoC. For official standings, always refer to the GSSoC leaderboard directly.
+When your score changes, you get an email showing exactly what changed, which PRs contributed, and a one-click unsubscribe link.
 
 ---
 
 ## Running locally
-
-Clone the repo and install dependencies:
 
 ```bash
 git clone https://github.com/PRODHOSH/gssoc-tracker
@@ -66,13 +113,43 @@ Copy the example env file and fill in your values:
 cp .env.local.example .env.local
 ```
 
+The env vars you need:
+
+| Variable | What it is |
+|---|---|
+| `GH_TOKEN` | GitHub personal access token (public_repo read only) — increases API rate limit from 60 to 5000 req/hr |
+| `SMTP_USER` | Gmail address for sending alert emails |
+| `SMTP_PASS` | Gmail app password (not your account password) |
+| `NOTIFY_EMAIL` | Where feedback and admin emails are sent |
+| `SYNC_SECRET` | Secret key for the score sync webhook |
+| `APP_URL` | Your deployment URL |
+
 Then start the dev server:
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:3000` and you're good to go.
+Open `http://localhost:3000` and you are good to go.
+
+---
+
+## Tech stack
+
+- **Next.js 15** (App Router, server components, `unstable_cache` for GitHub API caching)
+- **TypeScript**
+- **Recharts** for all charts
+- **Framer Motion** for animations
+- **Nodemailer** for email alerts
+- **Vercel** for hosting and edge caching
+
+No database. No auth. No external services beyond GitHub API and Gmail.
+
+---
+
+## Important note
+
+This is an independent community tool. Scores shown here may differ from the official GSSoC leaderboard because this tracker counts PRs from all repos, not just officially registered ones. For official standings, always check the GSSoC leaderboard directly.
 
 ---
 
@@ -80,7 +157,7 @@ Open `http://localhost:3000` and you're good to go.
 
 **Prodhosh V.S** — GSSoC 2026 Ambassador + Contributor, VIT Chennai
 
-Built this to scratch my own itch, kept it because it turned out useful. If it helped you too, a star on the repo goes a long way.
+Built this to scratch my own itch, kept it because it turned out useful for a lot of people. If it helped you, a star on the repo goes a long way.
 
 [![Star on GitHub](https://img.shields.io/github/stars/PRODHOSH/gssoc-tracker?style=social)](https://github.com/PRODHOSH/gssoc-tracker)
 
