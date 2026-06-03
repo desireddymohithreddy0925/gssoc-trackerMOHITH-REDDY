@@ -10,6 +10,7 @@ import { AnalyticsCharts } from "@/components/AnalyticsCharts";
 import { ScoringGuide } from "@/components/pr-tracker/ScoringGuide";
 import type { PRTrackerData } from "@/types/pr-tracker";
 import type { Metadata } from "next";
+import { NpsFeedback } from "@/components/NpsFeedback";
 
 export const dynamic = "force-dynamic";
 
@@ -81,6 +82,7 @@ export default async function PRTrackerDashboard({ params }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", background: "#f5f5f5", fontFamily: "var(--font-sans)" }}>
+      <NpsFeedback />
       {/* ── Sticky nav ── */}
       <div style={{
         background: "rgba(255,255,255,0.9)",

@@ -10,6 +10,7 @@ import { AnalyticsCharts } from "@/components/AnalyticsCharts";
 import { MentorScoringGuide } from "@/components/mentor/MentorScoringGuide";
 import type { MentorTrackerData } from "@/lib/mentor-tracker";
 import type { Metadata } from "next";
+import { NpsFeedback } from "@/components/NpsFeedback";
 
 export const dynamic = "force-dynamic";
 
@@ -82,6 +83,7 @@ export default async function MentorTrackerPage({ params }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", background: "#f5f5f5", fontFamily: "var(--font-sans)" }}>
+      <NpsFeedback />
       {/* ── Sticky nav ── */}
       <div style={{
         background: "rgba(255,255,255,0.9)", backdropFilter: "blur(12px)",
