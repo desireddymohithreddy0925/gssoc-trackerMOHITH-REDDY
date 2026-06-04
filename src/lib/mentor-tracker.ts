@@ -129,11 +129,13 @@ async function _buildMentorTrackerData(username: string): Promise<MentorTrackerD
     };
   });
 
+  const mergedPRs = prs.filter((p) => p.state === "merged");
+
   return {
     user,
     prs,
-    totalPoints: prs.reduce((s, p) => s + p.points, 0),
-    totalPRs: prs.length,
+    totalPoints: mergedPRs.reduce((s, p) => s + p.points, 0),
+    totalPRs: mergedPRs.length,
     fetchedAt: new Date().toISOString(),
   };
 }

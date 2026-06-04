@@ -21,7 +21,7 @@ function LabelChip({ name, color }: { name: string; color?: string }) {
   );
 }
 
-type SortKey = "points" | "createdAt" | "title" | "repo";
+type SortKey = "points" | "mergedAt" | "title" | "repo";
 
 function SortBtn({ col, active, dir, onToggle, children }: {
   col: SortKey; active: SortKey; dir: "asc" | "desc";
@@ -47,7 +47,7 @@ function SortBtn({ col, active, dir, onToggle, children }: {
 
 export function MentorPRTable({ prs }: { prs: MentorPR[] }) {
   const [query, setQuery]     = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("createdAt");
+  const [sortKey, setSortKey] = useState<SortKey>("mergedAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [page, setPage]       = useState(1);
   const PER_PAGE = 15;
@@ -68,10 +68,10 @@ export function MentorPRTable({ prs }: { prs: MentorPR[] }) {
   const sorted = useMemo(() => {
     const mult = sortDir === "asc" ? 1 : -1;
     return [...filtered].sort((a, b) => {
-      if (sortKey === "points")    return mult * (a.points - b.points);
-      if (sortKey === "createdAt") return mult * (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      if (sortKey === "title")     return mult * a.title.localeCompare(b.title);
-      if (sortKey === "repo")      return mult * a.repo.localeCompare(b.repo);
+      if (sortKey === "points")   return mult * (a.points - b.points);
+      if (sortKey === "mergedAt") return mult * (new Date(a.mergedAt ?? 0).getTime() - new Date(b.mergedAt ?? 0).getTime());
+      if (sortKey === "title")    return mult * a.title.localeCompare(b.title);
+      if (sortKey === "repo")     return mult * a.repo.localeCompare(b.repo);
       return 0;
     });
   }, [filtered, sortKey, sortDir]);
@@ -118,8 +118,8 @@ export function MentorPRTable({ prs }: { prs: MentorPR[] }) {
                 [null,        "Labels"],
                 [null,        "Level"],
                 [null,        "Quality Bonus"],
-                ["points",    "Points"],
-                ["createdAt", "Date"],
+                ["points",   "Points"],
+                ["mergedAt", "Merged"],
                 [null,        ""],
               ] as [SortKey | null, string][]).map(([key, label], i) => (
                 <th key={i} style={{
@@ -203,10 +203,12 @@ export function MentorPRTable({ prs }: { prs: MentorPR[] }) {
                     </span>
                   </td>
 
-                  {/* Date */}
+                  {/* Merged */}
                   <td style={{ padding: "10px 12px", borderRight: `1px solid ${ds.hairlineCool}`, whiteSpace: "nowrap" }}>
                     <span style={{ fontSize: 12, color: ds.inkMute2 }}>
-                      {new Date(pr.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" })}
+                      {pr.mergedAt
+                        ? new Date(pr.mergedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" })
+                        : <span style={{ color: ds.inkFaint }}>—</span>}
                     </span>
                   </td>
 
@@ -229,7 +231,7 @@ export function MentorPRTable({ prs }: { prs: MentorPR[] }) {
           <span style={{ fontSize: 12, color: ds.inkMute2 }}>Page {page} of {totalPages}</span>
           <div style={{ display: "flex", gap: 6 }}>
             {[...Array(totalPages)].map((_, i) => (
-              <button key={i} onClick={() => setPage(i + 1)} style={{
+              <button key={i} onClick={() => setPage(i + 1)} suppressHydrationWarning style={{
                 width: 28, height: 28, borderRadius: ds.rSm,
                 border: `1px solid ${page === i + 1 ? ds.primary : ds.hairline}`,
                 background: page === i + 1 ? "rgba(62,207,142,0.08)" : "transparent",

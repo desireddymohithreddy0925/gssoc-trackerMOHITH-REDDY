@@ -358,6 +358,7 @@ export function PRTable({ prs, username }: Props) {
               <button
                 key={i}
                 onClick={() => setPage(i + 1)}
+                suppressHydrationWarning
                 style={{
                   width: 28, height: 28, borderRadius: ds.rSm,
                   border: `1px solid ${page === i + 1 ? ds.primary : ds.hairline}`,
