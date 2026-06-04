@@ -4,6 +4,17 @@ import { ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Search, Download } from 
 import { ds, fontMono } from "@/lib/ds";
 import type { TrackedPR } from "@/types/pr-tracker";
 
+/* ── Pagination helper ───────────────────────────────────────── */
+function pageItems(current: number, total: number): (number | null)[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const items: (number | null)[] = [1];
+  if (current > 3) items.push(null);
+  for (let p = Math.max(2, current - 2); p <= Math.min(total - 1, current + 2); p++) items.push(p);
+  if (current < total - 2) items.push(null);
+  items.push(total);
+  return items;
+}
+
 /* ── Label chip ─────────────────────────────────────────────── */
 function LabelChip({ name, color }: { name: string; color?: string }) {
   const bg = color ? `${color}22` : `${ds.hairlineCool}`;
@@ -348,29 +359,29 @@ export function PRTable({ prs, username }: Props) {
         <div style={{
           padding: "12px 18px",
           borderTop: `1px solid ${ds.hairlineCool}`,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
+          display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8,
         }}>
-          <span style={{ fontSize: 12, color: ds.inkMute2 }}>
-            Page {page} of {totalPages}
-          </span>
-          <div style={{ display: "flex", gap: 6 }}>
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i + 1)}
-                suppressHydrationWarning
-                style={{
-                  width: 28, height: 28, borderRadius: ds.rSm,
-                  border: `1px solid ${page === i + 1 ? ds.primary : ds.hairline}`,
-                  background: page === i + 1 ? `rgba(62,207,142,0.08)` : "transparent",
-                  color: page === i + 1 ? ds.primaryDeep : ds.inkMute,
-                  fontSize: 12, fontWeight: page === i + 1 ? 600 : 400,
-                  cursor: "pointer",
-                }}
-              >
-                {i + 1}
-              </button>
-            ))}
+          <span style={{ fontSize: 12, color: ds.inkMute2 }}>Page {page} of {totalPages}</span>
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} suppressHydrationWarning
+              style={{ height: 28, padding: "0 10px", borderRadius: ds.rSm, border: `1px solid ${ds.hairline}`,
+                background: "transparent", color: page === 1 ? ds.inkFaint : ds.inkMute,
+                fontSize: 13, cursor: page === 1 ? "default" : "pointer" }}>‹</button>
+            {pageItems(page, totalPages).map((p, i) =>
+              p === null
+                ? <span key={`e${i}`} style={{ fontSize: 12, color: ds.inkFaint, padding: "0 2px" }}>…</span>
+                : <button key={p} onClick={() => setPage(p)} suppressHydrationWarning style={{
+                    width: 28, height: 28, borderRadius: ds.rSm,
+                    border: `1px solid ${page === p ? ds.primary : ds.hairline}`,
+                    background: page === p ? "rgba(62,207,142,0.08)" : "transparent",
+                    color: page === p ? ds.primaryDeep : ds.inkMute,
+                    fontSize: 12, fontWeight: page === p ? 600 : 400, cursor: "pointer",
+                  }}>{p}</button>
+            )}
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} suppressHydrationWarning
+              style={{ height: 28, padding: "0 10px", borderRadius: ds.rSm, border: `1px solid ${ds.hairline}`,
+                background: "transparent", color: page === totalPages ? ds.inkFaint : ds.inkMute,
+                fontSize: 13, cursor: page === totalPages ? "default" : "pointer" }}>›</button>
           </div>
         </div>
       )}
