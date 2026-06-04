@@ -50,6 +50,20 @@ export function NpsFeedback() {
   async function submit() {
     if (!score) return;
     setPhase("loading");
+
+    // Submit to Google Forms (no-cors — response unreadable but submission goes through)
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdySnxt51VRosmksI7-lF1MEZpOAmaEYGC07X3Yv9KWsbgLOg/formResponse";
+    fetch(FORM_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        "entry.1447509757": String(score),
+        "entry.10650169": comment.trim(),
+      }).toString(),
+    }).catch(() => {});
+
+    // Also send email notification
     try {
       await fetch("/api/feedback", {
         method: "POST",
@@ -57,6 +71,7 @@ export function NpsFeedback() {
         body: JSON.stringify({ score, comment: comment.trim() }),
       });
     } catch { /* email failure shouldn't break UX */ }
+
     localStorage.setItem(K_DONE, "1");
     setPhase("done");
     setTimeout(() => setVisible(false), 2200);

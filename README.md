@@ -37,7 +37,7 @@ You pick your role — contributor or mentor — enter your GitHub username, and
 
 ![PR Tracker Dashboard 2](https://raw.githubusercontent.com/PRODHOSH/gssoc-tracker/main/public/dashboard2.png)
 
-Fetches all your public PRs that carry GSSoC labels and scores them using the official formula:
+Fetches all your public **merged** PRs that carry GSSoC labels and scores them using the official formula. Open or closed-without-merge PRs are shown for reference but do not count toward your total.
 
 ```
 Score = 50 + (difficulty × quality multiplier) + type bonus
@@ -62,7 +62,7 @@ The key difference from the official tracker: **this one is not limited to regis
 
 ### Mentor tracker
 
-If you are a GSSoC mentor, you can track the PRs you have reviewed. It searches for PRs labelled `mentor:yourusername` and `gssoc:approved` and calculates your mentor score:
+If you are a GSSoC mentor, you can track the PRs you have reviewed. It searches for PRs labelled `mentor:yourusername` and `gssoc:approved` and calculates your mentor score. Only **merged** PRs count toward your total — unmerged PRs are shown with their projected points but excluded from the score.
 
 ```
 Score = level base + quality bonus
