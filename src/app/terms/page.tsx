@@ -165,7 +165,7 @@ export default function TermsPage() {
             <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, textDecoration: "underline" }}>Google Privacy Policy</a>.
           </P>
 
-          <P><Bright>Email alerts (optional):</Bright> If you choose to subscribe to PR alerts, your email address is stored to send those notifications and for nothing else. You can remove it any time using the unsubscribe link in any alert email. We do not share your email with anyone.</P>
+          <P><Bright>Email alerts (optional):</Bright> If you subscribe to PR alerts, your GitHub username and email address are saved in a file inside this project&apos;s GitHub repository. That is literally where the data lives — a plain file in the repo, nothing fancier. It is only used to send you alerts and nothing else. You can remove yourself any time using the unsubscribe link in any alert email, and your entry gets deleted from that file immediately. We do not share it with anyone.</P>
 
           <P><Bright>Feedback (optional):</Bright> If you submit a rating or comment through the feedback widget, your response is submitted anonymously to a Google Form. No name, email, or identifying information is collected. A flag is saved in your browser&apos;s local storage so the prompt does not appear again on the same device — this data never leaves your browser.</P>
 
