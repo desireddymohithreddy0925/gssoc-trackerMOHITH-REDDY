@@ -1,5 +1,5 @@
-// All 424 officially registered GSSoC 2026 projects
-// Source: https://gssoc.girlscript.org/api/projects — fetched 2026-06-05
+// All 421 officially registered GSSoC 2026 projects
+// Source: https://gssoc.girlscript.org/api/projects — fetched 2026-06-15
 // All values are lowercase owner/repo for case-insensitive matching
 const REPOS: string[] = [
   "sourabhx16/astrodex",
@@ -27,7 +27,6 @@ const REPOS: string[] = [
   "ankita-gupta2004/healhive",
   "anchal-koli/cogniflow-adaptive",
   "user-synax/campusx",
-  "utkarshh20/fullstack-chat-app",
   "vishal-sharmak7/mindscapev2",
   "sumwanyuno/zeroly",
   "vijaypatil477/debugra",
@@ -201,7 +200,6 @@ const REPOS: string[] = [
   "souhridya-patra/smartclassroom",
   "itzzavdhesh/voiceforge",
   "engineerrobin7/infynova-website-",
-  "shruti070107/regenx",
   "jeet-varshney/nextt",
   "sivaani-janaswamy/eye-guard",
   "hitesh-kumar123/travel-plans-",
@@ -308,7 +306,6 @@ const REPOS: string[] = [
   "premshaw23/learnova",
   "nitya-003/cropchain",
   "piyushydv08/safevoice",
-  "agnivo988/repo-lyzer",
   "vishnukothakapu/linkid",
   "chunnu-munnu/payshield-aiops",
   "gitmetricslab/github_tracker",
