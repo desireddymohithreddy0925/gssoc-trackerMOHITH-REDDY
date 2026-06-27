@@ -127,13 +127,15 @@ export default function TermsPage() {
           </P>
           <P>Here is exactly what happens when you search a username:</P>
           <Bullets items={[
-            "Your public pull requests are fetched from the GitHub API",
+            "We check our Supabase database to see if we already have your pull requests",
+            "If it has been more than 1 minute since your last check, we ask GitHub for any new or updated PRs",
+            "We save that new data to our database so the app stays lightning fast and avoids GitHub rate limits",
             "The GSSoC labels on each PR are read (gssoc:approved, level:*, quality:*, type:*, etc.)",
             "Points are calculated using the GSSoC 2026 scoring formula",
             "Charts and stats are generated and shown to you",
           ]} />
           <P>
-            Results are <Bright>cached for up to 5 minutes</Bright> on Vercel&apos;s servers to reduce GitHub API load. After that window the data is gone. Nothing is stored long term, and nothing is sold.
+            Because we use a smart 1 minute delta sync, your updates appear almost instantly while keeping the site completely crash proof during huge traffic spikes.
           </P>
         </Section>
 
@@ -161,23 +163,17 @@ export default function TermsPage() {
           <Bullets items={[
             "No accounts, no sign-up, no passwords",
             "No selling, sharing, or monetising of any data",
-            "No tracking of which usernames you look up",
           ]} />
 
-          <P><Bright>Google Analytics:</Bright> This site uses Google Analytics to understand how many people visit and which features they use. It collects anonymised, aggregated data like page views and session counts. No personal information is shared with us through it. You can read more in the{" "}
-            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, textDecoration: "underline" }}>Google Privacy Policy</a>.
-          </P>
+          <P><Bright>Public Data Storage:</Bright> To make the tracker fast and prevent GitHub from blocking us for too many requests, we store a copy of your public GSSoC pull requests in a Supabase database. This data is strictly the public information already visible on GitHub (PR titles, labels, links, and merge times). We do not have access to your private repos or code.</P>
 
-          <P><Bright>Email alerts (optional):</Bright> If you subscribe to PR alerts, your GitHub username and email address are saved in a file inside this project&apos;s GitHub repository. That is literally where the data lives — a plain file in the repo, nothing fancier. It is only used to send you alerts and nothing else. You can remove yourself any time using the unsubscribe link in any alert email, and your entry gets deleted from that file immediately. We do not share it with anyone.</P>
+          <P><Bright>Analytics (PostHog & Vercel):</Bright> This site uses Vercel Analytics and PostHog to understand how many people visit, if the site is crashing, and which features are used the most. They collect basic usage data so we can keep improving the app. No invasive personal data is tracked.</P>
 
-          <P><Bright>Feedback (optional):</Bright> If you submit a rating or comment through the feedback widget, your response is submitted anonymously to a Google Form. No name, email, or identifying information is collected. A flag is saved in your browser&apos;s local storage so the prompt does not appear again on the same device — this data never leaves your browser.</P>
+          <P><Bright>Email alerts (optional):</Bright> If you subscribe to PR alerts, your GitHub username and email address are saved in a file inside this project's GitHub repository. That is literally where the data lives, a plain file in the repo, nothing fancier. It is only used to send you alerts and nothing else. You can remove yourself any time using the unsubscribe link in any alert email, and your entry gets deleted from that file immediately. We do not share it with anyone.</P>
 
-          <P>The only external service called for tracker functionality is the GitHub REST API at api.github.com, which is subject to{" "}
-            <a href="https://docs.github.com/en/site-policy/github-terms/github-terms-of-service" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, textDecoration: "underline" }}>GitHub&apos;s own terms</a>.
-          </P>
+          <P><Bright>Feedback (optional):</Bright> If you submit a rating or comment through the feedback widget, your response is submitted anonymously to a Google Form. No name, email, or identifying information is collected. A flag is saved in your browser's local storage so the prompt does not appear again on the same device, this data never leaves your browser.</P>
 
-          <P>
-            Questions about privacy? Email{" "}
+          <P>Questions about privacy? Email{" "}
             <a href="mailto:prodhoshlaptop@gmail.com" style={{ color: ds.primary, textDecoration: "underline" }}>prodhoshlaptop@gmail.com</a>.
           </P>
         </Section>
