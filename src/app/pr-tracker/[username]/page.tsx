@@ -87,7 +87,6 @@ export default async function PRTrackerDashboard({ params }: Props) {
       <StarNudge username={decoded} />
       {/* ── Sticky nav ── */}
       <div style={{
-        background: "rgba(255,255,255,0.9)",
         backdropFilter: "blur(12px)",
         padding: "12px 16px",
         background: ds.canvas,
