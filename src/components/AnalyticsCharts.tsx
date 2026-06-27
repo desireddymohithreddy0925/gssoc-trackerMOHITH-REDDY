@@ -173,7 +173,7 @@ export function AnalyticsCharts({ prs }: { prs: AnalyticsPR[] }) {
   if (!prs.length) return null;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))", gap: 12 }}>
         <ChartCard title="Level Distribution"><LevelChart prs={prs} /></ChartCard>
         <ChartCard title="Quality Distribution"><QualityChart prs={prs} /></ChartCard>
       </div>

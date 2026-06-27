@@ -79,7 +79,7 @@ export function StatsGrid({ data }: Props) {
   return (
     <div style={{
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))",
+      gridTemplateColumns: "repeat(auto-fill, minmax(min(130px, 100%), 1fr))",
       gap: 10,
       marginBottom: 16,
     }}>

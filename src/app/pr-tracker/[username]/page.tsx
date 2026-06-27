@@ -89,15 +89,14 @@ export default async function PRTrackerDashboard({ params }: Props) {
       <div style={{
         background: "rgba(255,255,255,0.9)",
         backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        padding: "12px 16px",
+        background: ds.canvas,
         borderBottom: `1px solid ${ds.hairlineCool}`,
-        padding: "0 24px",
-        height: 52,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
+        display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12,
         position: "sticky", top: 0, zIndex: 20,
         boxShadow: "0 1px 4px rgba(23,23,23,0.05)",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <Link href="/" style={{
             display: "inline-flex", alignItems: "center", gap: 5,
             color: ds.inkMute, textDecoration: "none", fontSize: 13,
@@ -226,10 +225,10 @@ export default async function PRTrackerDashboard({ params }: Props) {
           padding: "12px 16px",
           marginBottom: 32,
         }}>
-          <p style={{ margin: 0, fontSize: 12, color: ds.inkMute2, lineHeight: 1.7 }}>
+          <p style={{ margin: 0, fontSize: 12, color: ds.inkMute2, lineHeight: 1.7, wordBreak: "break-word" }}>
             <strong style={{ color: ds.inkMute, fontSize: 12 }}>Scoring formula</strong>
             {"  "}
-            <code style={{ fontFamily: fontMono, fontSize: 11, background: "#f0fdf4", color: "#166534", padding: "1px 6px", borderRadius: 4 }}>
+            <code style={{ fontFamily: fontMono, fontSize: 11, background: "#f0fdf4", color: "#166534", padding: "1px 6px", borderRadius: 4, whiteSpace: "normal", display: "inline-block" }}>
               50 + (difficulty × quality) + type_bonus
             </code>
             {"  ·  "}

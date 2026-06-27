@@ -133,8 +133,8 @@ export function GitHubProfileCard({ user, rank, totalPoints, badgeOverride, poin
             border: "1.5px solid rgba(62,207,142,0.2)",
             borderRadius: ds.rLg,
             textAlign: "center",
-            minWidth: 120,
-            flexShrink: 0,
+            flexShrink: 1,
+            minWidth: 110,
           }}>
             <p style={{ margin: "0 0 1px", fontSize: 10, fontWeight: 700, color: ds.inkMute2, letterSpacing: "0.1em", textTransform: "uppercase" }}>
               {pointsLabel ?? "GSSoC Points"}

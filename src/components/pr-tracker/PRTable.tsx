@@ -191,8 +191,10 @@ export function PRTable({ prs, username }: Props) {
       background: ds.canvas,
       border: `1px solid ${ds.hairlineCool}`,
       borderRadius: ds.rLg,
-      boxShadow: "0 1px 3px rgba(23,23,23,0.03)",
       overflow: "hidden",
+      boxShadow: ds.shadowSubtle,
+      width: "100%",
+      maxWidth: "100%",
     }}>
       {/* Header */}
       <div style={{

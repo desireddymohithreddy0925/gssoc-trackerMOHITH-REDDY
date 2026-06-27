@@ -34,19 +34,19 @@ const ROLES: { id: Role; icon: React.ReactNode; label: string; desc: string; bor
 
 export default function Home() {
   const router = useRouter();
-  const [step, setStep]         = useState<"role" | "input">("role");
-  const [role, setRole]         = useState<Role | null>(null);
-  const [input, setInput]       = useState("");
-  const [state, setState]       = useState<"idle" | "loading" | "error">("idle");
-  const [errMsg, setErrMsg]     = useState("");
+  const [step, setStep] = useState<"role" | "input">("role");
+  const [role, setRole] = useState<Role | null>(null);
+  const [input, setInput] = useState("");
+  const [state, setState] = useState<"idle" | "loading" | "error">("idle");
+  const [errMsg, setErrMsg] = useState("");
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("gssoc_guidelines_v1")) setShowBanner(true);
+    if (!localStorage.getItem("gssoc_validator_banner")) setShowBanner(true);
   }, []);
 
   function dismissBanner() {
-    localStorage.setItem("gssoc_guidelines_v1", "1");
+    localStorage.setItem("gssoc_validator_banner", "1");
     setShowBanner(false);
   }
 
@@ -88,9 +88,9 @@ export default function Home() {
       minHeight: "100vh",
       background: ds.canvasNight,
       display: "flex", flexDirection: "column",
-      alignItems: "center", justifyContent: "center",
+      alignItems: "center",
       fontFamily: "var(--font-sans)",
-      padding: "40px 24px",
+      padding: "80px 24px 160px",
       position: "relative",
     }}>
 
@@ -101,12 +101,12 @@ export default function Home() {
           background: "rgba(62,207,142,0.07)",
           borderBottom: "1px solid rgba(62,207,142,0.15)",
           padding: "9px 20px",
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+          display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 10, flexWrap: "wrap"
         }}>
-          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1 }}>
-            📋 GSSoC 2026 scoring guidelines have been updated —{" "}
-            <a href="https://gssoc.girlscript.org/guidelines/labeling" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, fontWeight: 600, textDecoration: "none" }}>
-              see the new label guide
+          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.4, flex: 1, textAlign: "center", minWidth: 200 }}>
+            PR not showing up or points look wrong? —{" "}
+            <a href="/pr-check" style={{ color: ds.primary, fontWeight: 600, textDecoration: "none", display: "inline-block" }}>
+              Validate a specific PR to check for problems
             </a>
           </span>
           <button
@@ -125,7 +125,7 @@ export default function Home() {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        style={{ width: "100%", maxWidth: 480, textAlign: "center" }}
+        style={{ width: "100%", maxWidth: 480, textAlign: "center", margin: "auto 0" }}
       >
         {/* Icon */}
         <div style={{
