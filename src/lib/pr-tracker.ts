@@ -60,10 +60,17 @@ function lowestLabel(labelNames: string[], scores: Record<string, number>): stri
 }
 
 function calcPoints(labelNames: string[]) {
-  const hasInvalid = labelNames.some((l) => INVALID_LABELS.includes(l));
+  const invalidLabel = INVALID_LABELS.find((l) => labelNames.includes(l));
   const hasApproved = labelNames.includes(REQUIRED_LABEL);
 
-  if (hasInvalid || !hasApproved) {
+  let invalidReason: string | undefined = undefined;
+  if (invalidLabel) {
+    invalidReason = `This PR was disqualified because it has the '${invalidLabel}' label. Ask a mentor to remove it if applied by mistake.`;
+  } else if (!hasApproved) {
+    invalidReason = `This PR is missing the '${REQUIRED_LABEL}' label. Only officially approved PRs count toward your score.`;
+  }
+
+  if (invalidReason) {
     return {
       difficulty: null,
       difficultyScore: 0,
@@ -73,6 +80,7 @@ function calcPoints(labelNames: string[]) {
       typeBonusTotal: 0,
       points: 0,
       isValid: false,
+      invalidReason,
     };
   }
 
@@ -97,6 +105,7 @@ function calcPoints(labelNames: string[]) {
     typeBonusTotal,
     points,
     isValid: true,
+    invalidReason: undefined,
   };
 }
 
@@ -324,7 +333,10 @@ async function _buildPRTrackerData(username: string): Promise<PRTrackerData> {
       labelColors,
       isGSSoC: labelNames.some((l) => l.startsWith("gssoc")),
       ...calc,
-      disqualifiedReason: !isOfficialRepo ? "This PR was made in a repository that is not officially registered for GSSoC 2026. Only PRs in official repositories count toward your score." : undefined,
+      disqualifiedReason: [
+        !isOfficialRepo ? "This PR was made in a repository that is not officially registered for GSSoC 2026." : null,
+        calc.invalidReason
+      ].filter(Boolean).join(" ") || undefined,
     };
   }));
 
