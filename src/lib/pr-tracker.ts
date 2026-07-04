@@ -8,6 +8,8 @@ import type {
   PRRank,
 } from "@/types/pr-tracker";
 
+const USERNAME_RE = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/;
+
 /* ── Scoring tables ──────────────────────────────────────────── */
 
 const DIFFICULTY_SCORES: Record<string, number> = {
@@ -383,5 +385,9 @@ async function _buildPRTrackerData(username: string): Promise<PRTrackerData> {
 }
 
 export async function buildPRTrackerData(username: string) {
-  return _buildPRTrackerData(username.toLowerCase());
+  const normalized = username.toLowerCase();
+  if (!USERNAME_RE.test(normalized)) {
+    throw new Error("USER_NOT_FOUND");
+  }
+  return _buildPRTrackerData(normalized);
 }

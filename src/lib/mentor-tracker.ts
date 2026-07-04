@@ -4,6 +4,8 @@ import { fetchGitHubUser } from "@/lib/pr-tracker";
 import { GSSOC_REPO_SET } from "@/data/gssoc-repos";
 import type { RawGitHubPR, GitHubUser } from "@/types/pr-tracker";
 
+const USERNAME_RE = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/;
+
 export const MENTOR_LEVEL_SCORES: Record<string, number> = {
   "level:beginner":     10,
   "level:intermediate": 20,
@@ -204,6 +206,10 @@ function repoFromUrl(repositoryUrl: string) {
 
 async function _buildMentorTrackerData(username: string): Promise<MentorTrackerData> {
   const normalized = username.toLowerCase();
+  if (!USERNAME_RE.test(normalized)) {
+    throw new Error("USER_NOT_FOUND");
+  }
+  
   const [user, rawPRs] = await Promise.all([
     fetchGitHubUser(normalized),
     fetchMentorPRs(normalized),
