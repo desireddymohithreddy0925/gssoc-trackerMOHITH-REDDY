@@ -159,7 +159,8 @@ export async function fetchGitHubUser(username: string): Promise<GitHubUser> {
   return res.json() as Promise<GitHubUser>;
 }
 
-export async function fetchGSSoCPRs(username: string): Promise<RawGitHubPR[]> {
+export async function fetchGSSoCPRs(rawUsername: string): Promise<RawGitHubPR[]> {
+  const username = rawUsername.toLowerCase();
   const baseQ = `type:pr author:${username} label:"gssoc:approved"`;
 
   if (!supabase) {
@@ -180,8 +181,11 @@ export async function fetchGSSoCPRs(username: string): Promise<RawGitHubPR[]> {
   // 1 minute cache for near-instant updates while preventing rate limit crashes
   if (timeSinceSync > 1 * 60 * 1000) {
     let q = baseQ;
-    if (lastSync) {
-      q += ` updated:>${lastSync.toISOString()}`;
+    // If we haven't synced in 24 hours, ignore delta and do a full baseline sync to catch removed labels.
+    if (lastSync && timeSinceSync < 24 * 60 * 60 * 1000) {
+      // Subtract 10 minutes to overlap the search window, catching GitHub indexing delays
+      const overlapTime = new Date(lastSync.getTime() - 10 * 60 * 1000);
+      q += ` updated:>${overlapTime.toISOString()}`;
     }
     
     let deltaPRs: RawGitHubPR[] = [];
@@ -245,7 +249,7 @@ async function fetchPages(q: string, startPage: number, pages: number, order: "a
     Array.from({ length: pages }, async (_, i) => {
       const pageUrl = `https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=100&page=${i + startPage}&sort=created&order=${order}`;
       const r = await ghFetch(pageUrl);
-      if (!r.ok) return [];
+      if (!r.ok) throw new Error(`API_ERROR:${r.status}`);
       const d = await r.json() as { items: RawGitHubPR[] };
       return d.items;
     })

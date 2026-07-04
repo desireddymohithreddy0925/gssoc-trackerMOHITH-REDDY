@@ -54,7 +54,8 @@ async function ghFetch(url: string) {
   return fetch(url, { headers, cache: "no-store" });
 }
 
-export async function fetchMentorPRs(username: string): Promise<RawGitHubPR[]> {
+export async function fetchMentorPRs(rawUsername: string): Promise<RawGitHubPR[]> {
+  const username = rawUsername.toLowerCase();
   const baseQ = `label:"mentor:${username}" type:pr`;
 
   if (!supabase) {
@@ -75,20 +76,23 @@ export async function fetchMentorPRs(username: string): Promise<RawGitHubPR[]> {
   // 1 minute cache for near-instant updates while preventing rate limit crashes
   if (timeSinceSync > 1 * 60 * 1000) {
     let q = baseQ;
-    if (lastSync) {
-      q += ` updated:>${lastSync.toISOString()}`;
+    // If we haven't synced in 24 hours, ignore delta and do a full baseline sync to catch removed labels.
+    if (lastSync && timeSinceSync < 24 * 60 * 60 * 1000) {
+      // Subtract 10 minutes to overlap the search window, catching GitHub indexing delays
+      const overlapTime = new Date(lastSync.getTime() - 10 * 60 * 1000);
+      q += ` updated:>${overlapTime.toISOString()}`;
     }
     
-    // Update timestamp IMMEDIATELY to prevent Cache Stampedes from concurrent visitors
-    if (!lastSync) {
-      await supabase.from("users").upsert({ github_login: username, last_synced_at: now.toISOString() });
-    } else {
-      await supabase.from("users").update({ last_synced_at: now.toISOString() }).eq("github_login", username);
-    }
-
     let deltaPRs: RawGitHubPR[] = [];
     try {
       deltaPRs = await fetchAllFromGitHub(q);
+      
+      // Update timestamp AFTER successful fetch to prevent data loss on failure
+      if (!lastSync) {
+        await supabase.from("users").upsert({ github_login: username, last_synced_at: now.toISOString() });
+      } else {
+        await supabase.from("users").update({ last_synced_at: now.toISOString() }).eq("github_login", username);
+      }
     } catch (err: any) {
       console.warn(`[mentor-tracker] Delta sync failed for ${username}, falling back to DB:`, err.message);
     }
@@ -125,7 +129,7 @@ async function fetchPages(q: string, startPage: number, pages: number, order: "a
     Array.from({ length: pages }, async (_, i) => {
       const pageUrl = `https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=100&page=${i + startPage}&sort=created&order=${order}`;
       const r = await ghFetch(pageUrl);
-      if (!r.ok) return [];
+      if (!r.ok) throw new Error(`API_ERROR:${r.status}`);
       const d = await r.json() as { items: RawGitHubPR[] };
       return d.items;
     })
