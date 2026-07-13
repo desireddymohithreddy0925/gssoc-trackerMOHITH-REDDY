@@ -247,7 +247,7 @@ const REPOS: string[] = [
   "mrinalray/cybershield_url",
   "muneerali199/draftdeckai",
   "mustafa-mohd/green-vehicle-update",
-  "omnyx-os/omnyx-os",
+  "nagadevikona20-max/omnyx",
   "namish18/habitforge-lite",
   "neeru24/agri-vision",
   "nevinshine/telos-runtime",
