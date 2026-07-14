@@ -176,11 +176,13 @@ This is an independent community tool, not affiliated with GirlScript Summer of 
 
 ## Star History
 
+## Star History
+
 <a href="https://www.star-history.com/?repos=PRODHOSH%2Fgssoc-tracker&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=PRODHOSH/gssoc-tracker&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=PRODHOSH/gssoc-tracker&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=PRODHOSH/gssoc-tracker&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=PRODHOSH/gssoc-tracker&type=date&theme=dark&legend=top-left&sealed_token=EKkFmrElSlDEzfETn3Cid1GkDG624Ktvm8lA_8judj17SRA_sOCa7aCHRu63sgE5g3WYKCkldC-jmz2dgRN8lrSXhRg4pzicItLds2rx_CuAJwQjc1-XMGvMRmZmEulbREpITPJtJRIk8zdhGm4xrYiAPbxGBsHElHzxXjtYBwZhtV5HfT1Z06KNEvmI" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=PRODHOSH/gssoc-tracker&type=date&legend=top-left&sealed_token=EKkFmrElSlDEzfETn3Cid1GkDG624Ktvm8lA_8judj17SRA_sOCa7aCHRu63sgE5g3WYKCkldC-jmz2dgRN8lrSXhRg4pzicItLds2rx_CuAJwQjc1-XMGvMRmZmEulbREpITPJtJRIk8zdhGm4xrYiAPbxGBsHElHzxXjtYBwZhtV5HfT1Z06KNEvmI" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=PRODHOSH/gssoc-tracker&type=date&legend=top-left&sealed_token=EKkFmrElSlDEzfETn3Cid1GkDG624Ktvm8lA_8judj17SRA_sOCa7aCHRu63sgE5g3WYKCkldC-jmz2dgRN8lrSXhRg4pzicItLds2rx_CuAJwQjc1-XMGvMRmZmEulbREpITPJtJRIk8zdhGm4xrYiAPbxGBsHElHzxXjtYBwZhtV5HfT1Z06KNEvmI" />
  </picture>
 </a>
 
