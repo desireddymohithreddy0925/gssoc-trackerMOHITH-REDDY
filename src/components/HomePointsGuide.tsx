@@ -1,9 +1,60 @@
 "use client";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Info, X, GitPullRequest, Users } from "lucide-react";
+import { Info, X, GitPullRequest, Users, Copy, Check } from "lucide-react";
 import { ds, fontMono } from "@/lib/ds";
 import { getLabelChipColors } from "@/lib/labelColors";
+
+/* ── Copy text ─────────────────────────────────────────────────── */
+const COPY_CONTRIBUTOR = `🌟 GSSoC '26 Contributor Points System 🌟
+
+Base (every approved PR):
+gssoc:approved = +50 pts
+
+Difficulty:
+level:beginner = 20 pts
+level:intermediate = 35 pts
+level:advanced = 55 pts
+level:critical = 80 pts
+
+Quality Multiplier:
+quality:clean = ×1.2
+quality:exceptional = ×1.5
+
+Type Bonus:
+type:docs = +5 pts
+type:testing = +10 pts
+type:design = +10 pts
+type:refactor = +10 pts
+type:bug = +10 pts
+type:feature = +10 pts
+type:accessibility = +15 pts
+type:performance = +15 pts
+type:devops = +15 pts
+type:security = +20 pts
+
+Blocking Labels:
+gssoc:invalid = 0 pts
+gssoc:spam = 0 pts
+gssoc:ai-slop = 0 pts
+
+Example: gssoc:approved + level:advanced + quality:exceptional + type:devops = 50 + (55 × 1.5) + 15 = 147 pts
+Full label guide: https://gssoc.girlscript.org/guidelines/labeling`;
+
+const COPY_MENTOR = `🌟 GSSoC '26 Mentor Points System 🌟
+
+Level Base (per reviewed PR):
+level:beginner = 10 pts
+level:intermediate = 20 pts
+level:advanced = 30 pts
+level:critical = 50 pts
+
+Quality Bonus:
+quality:clean = +5 pts
+quality:exceptional = +10 pts
+
+Example: level:advanced + quality:exceptional = 30 + 10 = 40 pts
+Only PRs labeled mentor:username + gssoc:approved are counted.`;
 
 /* ── Contributor data ────────────────────────────────────────── */
 const C_DIFF = [
@@ -161,11 +212,18 @@ function MentorTab() {
 /* ── Modal ───────────────────────────────────────────────────── */
 function Modal({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<"contributor" | "mentor">("contributor");
+  const [copied, setCopied] = useState(false);
 
   const tabs = [
     { id: "contributor" as const, label: "Contributor", icon: <GitPullRequest size={12} />, accent: ds.primaryDeep, activeBg: "rgba(62,207,142,0.08)", activeBorder: ds.primaryDeep },
     { id: "mentor"      as const, label: "Mentor",      icon: <Users size={12} />,          accent: "#ca8a04",      activeBg: "rgba(251,191,36,0.08)", activeBorder: "#ca8a04"      },
   ];
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(tab === "contributor" ? COPY_CONTRIBUTOR : COPY_MENTOR);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return createPortal(
     <div
@@ -180,9 +238,17 @@ function Modal({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div style={{ padding: "16px 20px 14px", borderBottom: `1px solid ${ds.hairlineCool}`, display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: ds.ink }}>Points System</p>
-          <button onClick={onClose} style={{ width: 28, height: 28, border: `1px solid ${ds.hairlineCool}`, borderRadius: ds.rSm, background: "transparent", color: ds.inkMute2, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <X size={14} />
-          </button>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <button
+              onClick={handleCopy}
+              style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: ds.rSm, border: `1px solid ${copied ? "rgba(62,207,142,0.4)" : ds.hairlineCool}`, background: copied ? "rgba(62,207,142,0.08)" : "transparent", color: copied ? ds.primaryDeep : ds.inkMute2, fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all 0.15s" }}
+            >
+              {copied ? <Check size={12} /> : <Copy size={12} />} {copied ? "Copied" : "Copy"}
+            </button>
+            <button onClick={onClose} style={{ width: 28, height: 28, border: `1px solid ${ds.hairlineCool}`, borderRadius: ds.rSm, background: "transparent", color: ds.inkMute2, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <X size={14} />
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
