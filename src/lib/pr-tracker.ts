@@ -396,7 +396,7 @@ export const buildPRTrackerData = cache(
       }
       return _buildPRTrackerData(normalized);
     },
-    ["pr-tracker-data"],
+    ["pr-tracker-data-v2"],
     { revalidate: 300 }
   )
 );
