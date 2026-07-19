@@ -75,6 +75,10 @@ Score = level base + quality bonus
 | `quality:clean` | +5 pts |
 | `quality:exceptional` | +10 pts |
 
+### Project Admin tracker
+
+The [Project Admin tracker](https://gssoc-tracker-chi.vercel.app/) is deployed separately and was built by [@Ixotic27](https://github.com/Ixotic27). It helps project admins track contributions to their own repositories.
+
 ### PR Validator
 
 ![PR Validator](public/pr-check.png)

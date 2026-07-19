@@ -2,7 +2,7 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertCircle, Star, GitPullRequest, Users, ArrowLeft } from "lucide-react";
+import { Loader2, AlertCircle, Star, GitPullRequest, Users, ArrowLeft, ExternalLink, FolderGit2 } from "lucide-react";
 import { ds, fontMono } from "@/lib/ds";
 import { GitHubIcon } from "@/components/icons";
 import { SubscribeButton } from "@/components/SubscribeModal";
@@ -163,6 +163,10 @@ export default function Home() {
               {ROLES.map((r) => (
                 <RoleCard key={r.id} role={r} onSelect={selectRole} />
               ))}
+
+              {/* Project Admin — external link to separate deployment */}
+              <ProjectAdminCard />
+
               <div style={{ marginTop: 8, display: "flex", justifyContent: "center" }}>
                 <HomePointsGuide />
               </div>
@@ -354,5 +358,47 @@ function RoleCard({ role, onSelect }: { role: typeof ROLES[number]; onSelect: (r
       </div>
       <div style={{ marginLeft: "auto", alignSelf: "center", color: "rgba(255,255,255,0.2)", fontSize: 18, flexShrink: 0 }}>›</div>
     </button>
+  );
+}
+
+function ProjectAdminCard() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a
+      href="https://gssoc-tracker-chi.vercel.app"
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "flex", alignItems: "flex-start", gap: 14,
+        padding: "16px 18px", borderRadius: 12, cursor: "pointer",
+        background: hovered ? "rgba(139,92,246,0.1)" : "rgba(139,92,246,0.05)",
+        border: `1.5px solid ${hovered ? "rgba(139,92,246,0.5)" : "rgba(139,92,246,0.2)"}`,
+        textDecoration: "none", transition: "all 0.15s", width: "100%",
+        boxSizing: "border-box", textAlign: "left",
+      }}
+    >
+      <div style={{
+        width: 38, height: 38, borderRadius: 10,
+        background: hovered ? "rgba(139,92,246,0.1)" : "rgba(139,92,246,0.05)",
+        border: "1px solid rgba(139,92,246,0.3)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        flexShrink: 0, marginTop: 1,
+        transition: "all 0.15s",
+      }}>
+        <FolderGit2 size={20} color="#a78bfa" />
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+          <span style={{ fontSize: 15, fontWeight: 600, color: "#fff" }}>Project Admin</span>
+          <ExternalLink size={12} color="rgba(167,139,250,0.6)" />
+        </div>
+        <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.45 }}>
+          Track your project's GSSoC contributions — deployed separately
+        </div>
+      </div>
+      <div style={{ marginLeft: "auto", alignSelf: "center", color: "rgba(139,92,246,0.4)", fontSize: 18, flexShrink: 0 }}>›</div>
+    </a>
   );
 }

@@ -203,6 +203,9 @@ export default function TermsPage() {
             That is why I put it out for the community. It is not trying to replace the official tracker. It is a faster, more personal way to understand your own contributions.
           </P>
           <P>
+            The <Bright>Project Admin</Bright> tracker is deployed separately and was built by <a href="https://github.com/Ixotic27" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, textDecoration: "underline" }}>@Ixotic27</a>.
+          </P>
+          <P>
             Source code is open on{" "}
             <a href="https://github.com/PRODHOSH/gssoc-tracker" target="_blank" rel="noopener noreferrer" style={{ color: ds.primary, textDecoration: "underline" }}>
               GitHub
