@@ -13,6 +13,7 @@ import type { Metadata } from "next";
 import { NpsFeedback } from "@/components/NpsFeedback";
 import { StarNudge } from "@/components/StarNudge";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BackgroundSync } from "@/components/BackgroundSync";
 
 export const dynamic = "force-dynamic";
 
@@ -82,8 +83,12 @@ export default async function PRTrackerDashboard({ params }: Props) {
     timeZone: "Asia/Kolkata",
   });
 
+  // Empty = user has never been synced (all arrays empty)
+  const isEmpty = data.allPRs.length === 0;
+
   return (
     <div style={{ minHeight: "100vh", background: ds.canvasSoft, fontFamily: "var(--font-sans)" }}>
+      <BackgroundSync username={decoded} isEmpty={isEmpty} />
       <NpsFeedback />
       <StarNudge username={decoded} />
       {/* ── Sticky nav ── */}

@@ -66,29 +66,16 @@ export async function fetchMentorPRs(rawUsername: string): Promise<RawGitHubPR[]
     return fetchAllFromGitHub(baseQ);
   }
 
-  // Fire-and-forget: record visited_at so cron targets this mentor (no await)
+  // Record visited_at (fire-and-forget, non-blocking)
   void supabase
     .from("users")
     .upsert({ github_login: dbKey, visited_at: new Date().toISOString() }, { onConflict: "github_login" });
 
-  // Check if this mentor has ever been synced
-  const { data: userRow } = await supabase
-    .from("users")
-    .select("last_synced_at")
-    .eq("github_login", dbKey)
-    .single();
-
-  const hasBeenSynced = !!userRow?.last_synced_at;
-
-  if (!hasBeenSynced) {
-    // First-time mentor visit: sync immediately so they see their data
-    console.log(`[mentor-tracker] First visit for ${username} — doing one-time sync`);
-    await runMentorGitHubSync(username, baseQ);
-  }
-
-  // Always serve from DB — fast, zero GitHub API calls
+  // Pure DB read — instant, zero GitHub API calls
+  // The BackgroundSync client component handles syncing from GitHub asynchronously
   return readMentorFromDB(dbKey, baseQ);
 }
+
 
 /** Full GitHub → DB sync for a mentor. Called by first-visit and the cron. */
 export async function runMentorGitHubSync(username: string, baseQ?: string): Promise<void> {

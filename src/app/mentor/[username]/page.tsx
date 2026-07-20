@@ -13,6 +13,7 @@ import type { Metadata } from "next";
 import { NpsFeedback } from "@/components/NpsFeedback";
 import { StarNudge } from "@/components/StarNudge";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BackgroundSync } from "@/components/BackgroundSync";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +77,8 @@ export default async function MentorTrackerPage({ params }: Props) {
     timeZone: "Asia/Kolkata",
   });
 
+  const isEmpty = data.totalPRs === 0;
+
   const mentorBadge = {
     label: "GSSoC Mentor",
     emoji: "🧑‍🏫",
@@ -85,6 +88,7 @@ export default async function MentorTrackerPage({ params }: Props) {
 
   return (
     <div style={{ minHeight: "100vh", background: ds.canvasSoft, fontFamily: "var(--font-sans)" }}>
+      <BackgroundSync username={decoded} isMentor isEmpty={isEmpty} />
       <NpsFeedback />
       <StarNudge username={decoded} />
       {/* ── Sticky nav ── */}

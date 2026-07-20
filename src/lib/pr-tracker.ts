@@ -167,34 +167,21 @@ export async function fetchGSSoCPRs(rawUsername: string): Promise<RawGitHubPR[]>
   const username = rawUsername.toLowerCase();
   const baseQ = `type:pr author:${username} label:"gssoc:approved"`;
 
+  // No Supabase → fall back to direct GitHub fetch (dev environments without DB)
   if (!supabase) {
     return fetchAllFromGitHub(baseQ);
   }
 
-  // Fire-and-forget: record this user visited so the cron picks them up (no await)
+  // Record visited_at (fire-and-forget, non-blocking)
   void supabase
     .from("users")
     .upsert({ github_login: username, visited_at: new Date().toISOString() }, { onConflict: "github_login" });
 
-  // Check if this user has ever been synced
-  const { data: userRow } = await supabase
-    .from("users")
-    .select("last_synced_at")
-    .eq("github_login", username)
-    .single();
-
-  const hasBeenSynced = !!userRow?.last_synced_at;
-
-  if (!hasBeenSynced) {
-    // First-time visitor: do a one-time sync so they see their data immediately.
-    // The cron will handle all future syncs.
-    console.log(`[pr-tracker] First visit for ${username} — doing one-time sync`);
-    await runGitHubSync(username, baseQ, null);
-  }
-
-  // Always serve from DB — fast, no GitHub API calls in the critical path
+  // Pure DB read — instant, zero GitHub API calls
+  // The BackgroundSync client component handles syncing from GitHub asynchronously
   return readAllFromDB(username);
 }
+
 
 /** Full GitHub → DB sync for a single user. Called by first-visit and the cron. */
 export async function runGitHubSync(username: string, baseQ: string, _lastSync: Date | null): Promise<void> {
